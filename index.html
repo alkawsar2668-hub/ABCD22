@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সাদুল্লাপুর অরুন আলো রেসিডেন্সিয়াল স্কুল এন্ড কলেজ - রেজাল্ট</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+        .container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 650px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-top: 6px solid #047857;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            color: #065f46;
+            font-size: 20px;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+        .header h3 {
+            color: #0d9488;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .search-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            background: #f8fafc;
+        }
+        input:focus, select:focus {
+            border-color: #047857;
+            background: #ffffff;
+        }
+        .captcha-box {
+            grid-column: span 2;
+            background: #ecfdf5;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #a7f3d0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .captcha-text {
+            font-weight: bold;
+            color: #065f46;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+        .search-btn {
+            grid-column: span 2;
+            padding: 12px;
+            background-color: #047857;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .search-btn:hover {
+            background-color: #065f46;
+        }
+        .error-msg {
+            color: #dc2626;
+            text-align: center;
+            display: none;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        /* মার্কশিট ডিজাইন */
+        .marksheet {
+            display: none;
+            margin-top: 20px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 18px;
+            background: #ffffff;
+        }
+        .student-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .student-meta div strong {
+            color: #1e293b;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 8px 6px;
+            text-align: center;
+        }
+        th {
+            background-color: #047857;
+            color: white;
+            font-weight: 600;
+        }
+        td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        .summary-row {
+            background-color: #f1f5f9;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .pass-badge {
+            color: #16a34a;
+            font-weight: bold;
+        }
+        .fail-badge {
+            color: #dc2626;
+            font-weight: bold;
+        }
+        .footer-credit {
+            text-align: center;
+            margin-top: 18px;
+            padding-top: 10px;
+            border-top: 1px dashed #cbd5e1;
+            font-size: 13px;
+            color: #475569;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .action-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .print-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .reset-btn {
+            flex: 1;
+            padding: 10px;
+            background-color: #64748b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        @media (max-width: 480px) {
+            .search-panel, .student-meta {
+                grid-template-columns: 1fr;
+            }
+            .captcha-box, .search-btn {
+                grid-column: span 1;
+            }
+        }
+        @media print {
+            .search-panel, .action-btns, .error-msg {
+                display: none !important;
+            }
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                max-width: 100%;
+            }
+            .marksheet {
+                border: 2px solid #000;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>সাদুল্লাপুর অরুন আলো রেসিডেন্সিয়াল স্কুল এন্ড কলেজ</h1>
+        <h3>নির্বাচনী পরীক্ষা রেজাল্ট, এসএসসি ২০২৭</h3>
+    </div>
+
+    <!-- সার্চ ফর্ম -->
+    <div class="search-panel" id="searchPanel">
+        <div class="form-group">
+            <label>সেশন নির্বাচন করুন:</label>
+            <select id="sessionInput">
+                <option value="2025-26">২০২৫-২৬</option>
+                <option value="2026-27">২০২৬-২৭</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>বিভাগ নির্বাচন করুন:</label>
+            <select id="deptInput">
+                <option value="বিজ্ঞান">বিজ্ঞান (Science)</option>
+                <option value="মানবিক">মানবিক (Humanities)</option>
+                <option value="ব্যবসায় শিক্ষা">ব্যবসায় শিক্ষা (Commerce)</option>
+            </select>
+        </div>
+
+        <div class="form-group" style="grid-column: span 2;">
+            <label>রোল নম্বর লিখুন (ডেমো রোল: 101 বা 102):</label>
+            <input type="text" id="rollInput" placeholder="যেমন: 101">
+        </div>
+
+        <div class="captcha-box">
+            <span class="captcha-text" id="captchaQuestion">ক্যাপচা: 5 + 3 = ?</span>
+            <input type="number" id="captchaAnswer" placeholder="যোগফল লিখুন" style="max-width: 140px;">
+        </div>
+
+        <button class="search-btn" onclick="findResult()">ফলাফল দেখুন</button>
+    </div>
+
+    <p class="error-msg" id="errorMsg"></p>
+
+    <!-- মার্কশিট অংশ -->
+    <div class="marksheet" id="marksheet">
+        <div class="student-meta">
+            <div><strong>শিক্ষার্থীর নাম:</strong> <span id="mName"></span></div>
+            <div><strong>রোল নম্বর:</strong> <span id="mRoll"></span></div>
+            <div><strong>বিভাগ:</strong> <span id="mDept"></span></div>
+            <div><strong>সেশন:</strong> <span id="mSession"></span></div>
+            <div><strong>সর্বমোট প্রাপ্ত নম্বর:</strong> <span id="mGrandTotal" style="color:#047857; font-weight:bold;"></span></div>
+            <div><strong>চূড়ান্ত ফলাফল:</strong> <span id="mResultStatus"></span></div>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>বিষয়</th>
+                        <th>পূর্ণমান</th>
+                        <th>লিখিত</th>
+                        <th>নৈর্ব্যক্তিক</th>
+                        <th>প্র্যাকটিক্যাল</th>
+                        <th>মোট নম্বর</th>
+                        <th>গ্রেড</th>
+                        <th>পয়েন্ট</th>
+                    </tr>
+                </thead>
+                <tbody id="marksTableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="footer-credit">
+            Generated by AL Kawsar
+        </div>
+
+        <div class="action-btns">
+            <button class="print-btn" onclick="window.print()">প্রিন্ট / PDF ডাউনলোড</button>
+            <button class="reset-btn" onclick="resetSearch()">নতুন সার্চ করুন</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ডেমো শিক্ষার্থীদের ডাটাবেস
+    const studentsData = [
+        {
+            roll: "101",
+            session: "2025-26",
+            dept: "বিজ্ঞান",
+            name: "মোঃ আহাদ ইসলাম",
+            subjects: [
+                { name: "বাংলা", fullMarks: 100, written: 58, mcq: 25, practical: 0, isOptional: false },
+                { name: "ইংরেজি", fullMarks: 100, written: 82, mcq: 0, practical: 0, isOptional: false },
+                { name: "গণিত", fullMarks: 100, written: 65, mcq: 26, practical: 0, isOptional: false },
+                { name: "পদার্থবিজ্ঞান", fullMarks: 100, written: 42, mcq: 22, practical: 24, isOptional: false },
+                { name: "রসায়ন", fullMarks: 100, written: 40, mcq: 21, practical: 23, isOptional: false },
+                { name: "শারীরিক শিক্ষা", fullMarks: 50, written: 20, mcq: 12, practical: 13, isOptional: false },
+                { name: "উচ্চতর গণিত (৪র্থ বিষয়)", fullMarks: 100, written: 45, mcq: 22, practical: 24, isOptional: true }
+            ]
+        },
+        {
+            roll: "102",
+            session: "2025-26",
+            dept: "মানবিক",
+            name: "আবির হাসান",
+            subjects: [
+                { name: "বাংলা", fullMarks: 100, written: 50, mcq: 22, practical: 0, isOptional: false },
+                { name: "ইংরেজি", fullMarks: 100, written: 68, mcq: 0, practical: 0, isOptional: false },
+                { name: "সাধারণ বিজ্ঞান", fullMarks: 100, written: 55, mcq: 21, practical: 0, isOptional: false },
+                { name: "ইতিহাস", fullMarks: 100, written: 52, mcq: 23, practical: 0, isOptional: false },
+                { name: "পৌরনীতি (৪র্থ বিষয়)", fullMarks: 100, written: 60, mcq: 24, practical: 0, isOptional: true }
+            ]
+        }
+    ];
+
+    let num1, num2;
+
+    // র‍্যান্ডম ম্যাথ ক্যাপচা তৈরি
+    function generateCaptcha() {
+        num1 = Math.floor(Math.random() * 9) + 1;
+        num2 = Math.floor(Math.random() * 9) + 1;
+        document.getElementById("captchaQuestion").innerText = `ক্যাপচা: ${num1} + ${num2} = ?`;
+        document.getElementById("captchaAnswer").value = "";
+    }
+
+    // পেজ লোড হলে ক্যাপচা চালু হবে
+    window.onload = generateCaptcha;
+
+    // পূর্ণমান অনুযায়ী শতকরা নম্বর বের করে গ্রেড ও পয়েন্ট হিসাব (SSC স্ট্যান্ডার্ড)
+    function getGradeAndPoint(obtained, fullMarks) {
+        const percentage = (obtained / fullMarks) * 100;
+        if (percentage >= 80) return { grade: "A+", point: 5.0 };
+        if (percentage >= 70) return { grade: "A", point: 4.0 };
+        if (percentage >= 60) return { grade: "A-", point: 3.5 };
+        if (percentage >= 50) return { grade: "B", point: 3.0 };
+        if (percentage >= 40) return { grade: "C", point: 2.0 };
+        if (percentage >= 33) return { grade: "D", point: 1.0 };
+        return { grade: "F", point: 0.0 };
+    }
+
+    function findResult() {
+        const session = document.getElementById("sessionInput").value;
+        const dept = document.getElementById("deptInput").value;
+        const roll = document.getElementById("rollInput").value.trim();
+        const userCaptcha = parseInt(document.getElementById("captchaAnswer").value);
+        const errorMsg = document.getElementById("errorMsg");
+
+        // ক্যাপচা যাচাই
+        if (isNaN(userCaptcha) || userCaptcha !== (num1 + num2)) {
+            errorMsg.innerText = "ভুল ক্যাপচা উত্তর! অনুগ্রহ করে সঠিক যোগফল দিন।";
+            errorMsg.style.display = "block";
+            generateCaptcha();
+            return;
+        }
+
+        // শিক্ষার্থী খোঁজা
+        const student = studentsData.find(s => s.roll === roll && s.session === session && s.dept === dept);
+
+        if (!student) {
+            errorMsg.innerText = "দুঃখিত! প্রদত্ত রোল, সেশন ও বিভাগে কোনো ফলাফল পাওয়া যায়নি।";
+            errorMsg.style.display = "block";
+            generateCaptcha();
+            return;
+        }
+
+        errorMsg.style.display = "none";
+
+        // শিক্ষার্থীর মৌলিক তথ্য বসানো
+        document.getElementById("mName").innerText = student.name;
+        document.getElementById("mRoll").innerText = student.roll;
+        document.getElementById("mDept").innerText = student.dept;
+        document.getElementById("mSession").innerText = session === "2025-26" ? "২০২৫-২৬" : "২০২৬-২৭";
+
+        const tbody = document.getElementById("marksTableBody");
+        tbody.innerHTML = "";
+
+        let grandTotal = 0;
+        let grandFullMarks = 0;
+        let compulsoryPoints = 0;
+        let compulsoryCount = 0;
+        let optionalBonus = 0;
+        let hasFailed = false;
+
+        student.subjects.forEach(sub => {
+            const subTotal = sub.written + sub.mcq + sub.practical;
+            grandTotal += subTotal;
+            grandFullMarks += sub.fullMarks;
+
+            const result = getGradeAndPoint(subTotal, sub.fullMarks);
+
+            if (sub.isOptional) {
+                // ৪র্থ বিষয়ের পয়েন্ট ২ এর বেশি হলে অতিরিক্ত অংশ বোনাস হিসেবে যোগ হবে (৪র্থ বিষয়ে ফেইল করলে মূল জিপিএতে প্রভাব পড়ে না)
+                if (result.point > 2.0) {
+                    optionalBonus = result.point - 2.0;
+                }
+            } else {
+                if (result.grade === "F") {
+                    hasFailed = true;
+                }
+                compulsoryPoints += result.point;
+                compulsoryCount++;
+            }
+
+            const row = `<tr>
+                <td>${sub.name}</td>
+                <td>${sub.fullMarks}</td>
+                <td>${sub.written}</td>
+                <td>${sub.mcq > 0 ? sub.mcq : '-'}</td>
+                <td>${sub.practical > 0 ? sub.practical : '-'}</td>
+                <td><strong>${subTotal}</strong></td>
+                <td>${result.grade}</td>
+                <td>${result.point.toFixed(2)}</td>
+            </tr>`;
+            tbody.innerHTML += row;
+        });
+
+        // সর্বমোট নম্বর দেখানো
+        document.getElementById("mGrandTotal").innerText = `${grandTotal} / ${grandFullMarks}`;
+
+        // চূড়ান্ত GPA হিসাব (SSC নিয়ম অনুযায়ী)
+        const statusEl = document.getElementById("mResultStatus");
+        if (hasFailed) {
+            statusEl.innerHTML = `<span class="fail-badge">অকৃতকার্য (GPA: 0.00)</span>`;
+        } else {
+            let finalGPA = (compulsoryPoints + optionalBonus) / compulsoryCount;
+            if (finalGPA > 5.00) finalGPA = 5.00;
+            statusEl.innerHTML = `<span class="pass-badge">উত্তীর্ণ (GPA: ${finalGPA.toFixed(2)})</span>`;
+        }
+
+        document.getElementById("searchPanel").style.display = "none";
+        document.getElementById("marksheet").style.display = "block";
+    }
+
+    function resetSearch() {
+        document.getElementById("marksheet").style.display = "none";
+        document.getElementById("searchPanel").style.display = "grid";
+        document.getElementById("rollInput").value = "";
+        generateCaptcha();
+    }
+</script>
+
+</body>
+</html>
